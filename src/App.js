@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useEffect, useState} from 'react'
+import {Provider} from 'react-redux'
+import redux from './redux'
+import Pokedex from './pages/pokedex/Pokedex'
 
 function App() {
+  const [title, setTitle] = useState(document.title)
+
+  useEffect(() => {
+    window.addEventListener('blur', () => {
+      setTitle(document.title)
+      document.title = '¡No te vayas!'
+    })
+  }, [])
+
+  useEffect(() => {
+    window.addEventListener('focus', () => {
+      document.title = title
+    })
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Provider store={redux}>
+      <Pokedex />
+    </Provider>
+  )
 }
 
-export default App;
+export default App

@@ -1,21 +1,43 @@
 {
   "name": "pokedex",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^0.21.3",
+    "cross-fetch": "^3.0.6",
+    "es6-object-assign": "^1.1.0",
+    "graphql": "^16.6.0",
+    "i": "^0.3.7",
+    "jest-dom": "^3.5.0",
+    "moment": "^2.27.0",
+    "node-sass": "^8.0.0",
+    "npm": "^9.2.0",
+    "proxy-polyfill": "^0.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-redux": "^8.0.5",
     "react-scripts": "5.0.1",
+    "redux-mock-store": "^1.5.4",
+    "redux-thunk": "^2.4.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "REACT_APP_STAGE=dev react-scripts start",
+    "pre-start": "chmod +x ./env.sh && rm -rf ./env-config.js && ./env.sh && cp env-config.js ./public/utils",
+    "start:win": "react-scripts start",
+    "start:dev": "PORT=3001 react-scripts start",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build",
+    "test": "cross-env NODE_ICU_DATA=node_modules/full-icu react-scripts test",
+    "test:coverage": "react-scripts test --coverage",
+    "eject": "react-scripts eject",
+    "lint": "eslint src/",
+    "lint-fix": "eslint src/ --fix",
+    "awesome": "npm run test-ci && npm run lint",
+    "cypress:open": "$(npm bin)/cypress run",
+    "test-ci": "npm test -- --coverage --watchAll=false"
   },
   "eslintConfig": {
     "extends": [
@@ -33,6 +55,47 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "jest": {
+    "clearMocks": true,
+    "coveragePathIgnorePatterns": [
+      "src/redux/reducer/index.js",
+      "src/index.js",
+      "src/reportWebVitals.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "statements": 90,
+        "branches": 90,
+        "functions": 90,
+        "lines": 90
+      }
+    },
+    "collectCoverageFrom": [
+      "!src/redux/reducer/index.js",
+      "src/**/*.js"
+    ]
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.3.1",
+    "eslint": "^8.34.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.6.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.32.2",
+    "cross-env": "^7.0.3",
+    "jest": "^27.5.1",
+    "jest-watch-typeahead": "^0.6.5",
+    "prettier": "^2.8.4"
+  },
+  "lint-staged": {
+    "**/*.js": [
+      "prettier --write",
+      "eslint src/ --fix",
+      "npm test "
     ]
   }
 }
